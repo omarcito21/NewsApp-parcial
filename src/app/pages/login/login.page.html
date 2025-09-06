@@ -1,32 +1,50 @@
-<ion-content>
-  <ion-card>
-    <ion-card-content>
-      <ion-row>
-        <ion-col>
-          <ion-app type="email"
-          label="Email"
-          labelPlacement="floating"
-          placeholder="omar@gmail.com">     
-          </ion-app>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          
-          <ion-app type="password"
-          label="Password"
-          labelPlacement="floating"
-          placeholder="********">   
-          </ion-app>
-        
-        </ion-col>
-      </ion-row>
-       <ion-row>
-        <ion-button type = "submit"
-                   color="primary">
-                  iniciar sesion 
-                  </ion-button>
-        </ion-row>
-    </ion-card-content>
-  </ion-card>
+<ion-content class="login-container">
+
+  <form [formGroup]="loginForm" (ngSubmit)="onLogin();" class="form">
+
+<ion-card >
+  <ion-card-content>
+    <ion-row>
+      <ion-col>
+        <app-input
+        type="email"
+        label="email"
+        placeholder="omar@gmail.com"
+        [control]="email">
+        </app-input>
+      </ion-col>
+    </ion-row>
+
+     <ion-row>
+      <ion-col>
+        <app-input
+        type="password"
+        label="password"
+        placeholder="***************"
+        [control]="password">
+        </app-input>
+      </ion-col>
+    </ion-row>
+
+
+
+    <ion-row>
+
+     <ion-row class="aContent">
+      <a [routerLink]="['/register']">Register</a>
+    </ion-row>
+    
+      <ion-col class="button-container">
+        <app-button
+         type="submit"
+          color="primary"
+        [disabled]="loginForm.invalid"
+        value="Login"
+        ></app-button>
+      </ion-col>
+    </ion-row>
+  </ion-card-content>
+</ion-card>
+
+</form>
 </ion-content>

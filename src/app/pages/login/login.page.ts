@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { CONSTANTS } from 'src/app/constants/constants';
+import { IUser } from 'src/app/interfaces/user';
+import { Storage } from 'src/app/shared/services/storage';
+import { Toast } from 'src/app/shared/services/toast';
 import { __values } from 'tslib';
 
 
@@ -12,24 +17,62 @@ import { __values } from 'tslib';
 export class LoginPage implements OnInit {
   public email!: FormControl;
   public password!: FormControl;
-  public loginform!: FormGroup;
+  public loginForm!: FormGroup;
 
 
-
-  constructor() { }
+  constructor(private readonly storageSrv: Storage,
+     private readonly router: Router,
+    private readonly toastSrv: Toast) {
+    this.initForm();
+    }
 
   ngOnInit() {}
  
-  public onlogin(){
-    console.log(this.loginform.value);
-  }
+  public async onLogin(){
+    //console.log(this.loginForm.value)
 
-  private initform(){
-    this.email = new FormControl('', [Validators.required,Validators.email]);
-    this.password = new FormControl ('', [Validators.required,Validators.minLength(5)] );
-    Validators.maxLength(7),
-    Validators.pattern("");
+    const users = this.storageSrv.get<IUser[]>(CONSTANTS.USER) || [];
+
+    const user = users.find( u => u.email === this.email.value);
+
+    if(!user) {
+      await this.toastSrv.present({
+        mesage: "User dont exist",
+        color: "danger",
+        position: "bottom",
+      });
+      return;
+    }
+      const isValidPassword = user.password === this.password.value;
+      
+      if(isValidPassword) {
+        this.storageSrv.set( CONSTANTS.AUTH , {
+          uuid: user.uuid,
+        });
+        return this.router.navigate(['/home']);
+      }
+
+     await this.toastSrv.present({
+      mesage: "Password missmatch",
+      color: "danger",
+      position: 'bottom',
+     });
+     return;
+      
   }
+    private initForm(){
+      this.email = new FormControl('', [Validators.required, Validators.email])
+      this.password = new FormControl('', 
+        [Validators.required,
+         Validators.minLength(3),
+       //Validators.maxLength(15),
+          ]);
+
+          this.loginForm = new FormGroup({
+            email: this.email,
+            password: this.password,
+          });
+    }
 
 }
 
