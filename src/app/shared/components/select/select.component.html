@@ -1,0 +1,11 @@
+<ion-select
+[placeholder]="placeholder" 
+class="border_blue" 
+(ionChange)="onSelect($event)"
+>
+  <ion-select-option *ngFor="let pais of paises$ | async" [value]="pais.name">
+    {{pais.name}}  {{pais.unicodeFlag}}
+  </ion-select-option>
+
+</ion-select>
+
