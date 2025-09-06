@@ -6,12 +6,13 @@ import { ButtonComponent } from './components/button/button.component';
 import { Storage } from './services/storage';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectComponent } from './components/select/select.component';
+import { PaisesService } from './services/paises';
 
 const modules = [IonicModule, ReactiveFormsModule, FormsModule];
 const components = [InputComponent, ButtonComponent,SelectComponent]
 @NgModule({
   declarations: [components],
-  providers: [Storage],
+  providers: [Storage, PaisesService],
   imports: [
     CommonModule,
     modules,
